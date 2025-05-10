@@ -12,13 +12,14 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
  // loaded from Render env
 
 app.post("/sendEmail", async (req, res) => {
-  const { name, email, message } = req.body;
+  const { name, email, to, message } = req.body;
 
   const msg = {
-    to: "medhini.is22@bmsce.ac.in",
+    to: to,
     from: "medhini2004m@gmail.com", // must be verified in SendGrid
     subject: `New Message from ${name}`,
     text: `Email: ${email}\nMessage: ${message}`,
+    replyTo: email
   };
 
   try {
