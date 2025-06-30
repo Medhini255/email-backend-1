@@ -1,25 +1,23 @@
 const express = require("express");
 const sgMail = require("@sendgrid/mail");
 const cors = require("cors");
-require("dotenv").config(); // Loads environment variables from .env
-
+require("dotenv").config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
- // loaded from Render env
 
 app.post("/sendEmail", async (req, res) => {
-  const { name, email, to, message } = req.body;
+  const { to, subject, message } = req.body;
 
   const msg = {
-    to: to,
-    from: "medhini2004m@gmail.com", // must be verified in SendGrid
-    subject: `New Message from ${name}`,
-    text: `Email: ${email}\nMessage: ${message}`,
-    replyTo: email
+    to,
+    from: "medhini2004m@gmail.com", // verified sender
+    subject,
+    text: message,
+    html: `<p>${message}</p>` // optional HTML content
   };
 
   try {
@@ -32,5 +30,5 @@ app.post("/sendEmail", async (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log("Server running on port 3000");
+  console.log("Email API running on port 3000");
 });
